@@ -8,30 +8,18 @@
 
 #include <metal_stdlib>
 #include <simd/simd.h>
+using namespace metal;
 #include "ShaderTypes.h"
 
-using namespace metal;
 
 
-typedef struct
+vertex Vertex vertexShader(constant Vertex* in [[buffer(BufferIndexMesh)]],
+                           uint vid [[vertex_id]],
+                           constant Uniforms & uniforms [[buffer(BufferIndexUniforms)]])
 {
-    float4 position [[attribute(VertexAttributePosition)]];
-    float2 texCoord [[attribute(VertexAttributeTexcoord)]];
-} Vertex;
-
-typedef struct
-{
-    float4 position [[position]];
-    float2 texCoord;
-} ColorInOut;
-
-
-vertex ColorInOut vertexShader(Vertex in [[stage_in]],
-                               constant Uniforms & uniforms [[buffer(BufferIndexUniforms)]])
-{
-    ColorInOut out;
-    out.position = in.position;
-    out.texCoord = in.texCoord;
+    Vertex out;
+    out.position = in[vid].position;
+    out.texCoord = in[vid].texCoord;
     if (uniforms.flipVertical)
     {
         out.position.y = -out.position.y;
@@ -39,7 +27,7 @@ vertex ColorInOut vertexShader(Vertex in [[stage_in]],
     return out;
 }
 
-fragment uint4 fragmentShader(ColorInOut in [[stage_in]],
+fragment uint4 fragmentShader(Vertex in [[stage_in]],
                               constant Uniforms & uniforms [[buffer(BufferIndexUniforms)]],
                               texture2d<uint> colorMap     [[texture(TextureIndexColor)]])
 {

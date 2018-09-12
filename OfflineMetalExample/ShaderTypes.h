@@ -12,17 +12,27 @@
 #ifdef __METAL_VERSION__
 #define NS_ENUM(_type, _name) enum _name : _type _name; enum _name : _type
 #define NSInteger metal::int32_t
+#define SEMANTIC(s) [[s]]
 #else
 #import <Foundation/Foundation.h>
+typedef vector_float4 float4;
+typedef vector_float2 float2;
+#define SEMANTIC(s)
 #endif
 
 #include <simd/simd.h>
 
 
+typedef struct
+{
+    float4 position SEMANTIC(position);
+    float2 texCoord;
+} Vertex;
+
+
 typedef NS_ENUM(NSInteger, BufferIndex)
 {
-    BufferIndexMeshPositions = 0,
-    BufferIndexMeshTexCoords = 1,
+    BufferIndexMesh          = 0,
     BufferIndexUniforms      = 2
 };
 

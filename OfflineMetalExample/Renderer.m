@@ -17,7 +17,6 @@
     dispatch_semaphore_t _inFlightSemaphore;
 
     id <MTLTexture> _outputTexture;
-    MTLVertexDescriptor *_mtlVertexDescriptor;
     id <MTLRenderPipelineState> _pipelineState;
     id <MTLCommandQueue> _commandQueue;
 
@@ -25,8 +24,8 @@
     id <MTLBuffer> _uniformBuffer;
 
     // Mesh
-    id <MTLBuffer> _positionsBuffer;
-    id <MTLBuffer> _texCoordsBuffer;
+    id <MTLBuffer> _vertexBuffer;
+    
     NSUInteger _vertexCount;
     
     // Texture
@@ -73,26 +72,6 @@
         _outputTexture = [_device newTextureWithDescriptor:outputDesc];
     }
     
-    // vertex desc.
-    {
-        _mtlVertexDescriptor = [[MTLVertexDescriptor alloc] init];
-        _mtlVertexDescriptor.attributes[VertexAttributePosition].format = MTLVertexFormatFloat4;
-        _mtlVertexDescriptor.attributes[VertexAttributePosition].offset = 0;
-        _mtlVertexDescriptor.attributes[VertexAttributePosition].bufferIndex = BufferIndexMeshPositions;
-        
-        _mtlVertexDescriptor.attributes[VertexAttributeTexcoord].format = MTLVertexFormatFloat2;
-        _mtlVertexDescriptor.attributes[VertexAttributeTexcoord].offset = 0;
-        _mtlVertexDescriptor.attributes[VertexAttributeTexcoord].bufferIndex = BufferIndexMeshTexCoords;
-        
-        _mtlVertexDescriptor.layouts[BufferIndexMeshPositions].stride = sizeof(vector_float4);
-        _mtlVertexDescriptor.layouts[BufferIndexMeshPositions].stepRate = 1;
-        _mtlVertexDescriptor.layouts[BufferIndexMeshPositions].stepFunction = MTLVertexStepFunctionPerVertex;
-        
-        _mtlVertexDescriptor.layouts[BufferIndexMeshTexCoords].stride = sizeof(vector_float2);
-        _mtlVertexDescriptor.layouts[BufferIndexMeshTexCoords].stepRate = 1;
-        _mtlVertexDescriptor.layouts[BufferIndexMeshTexCoords].stepFunction = MTLVertexStepFunctionPerVertex;
-    }
-    
     // pipeline state.
     {
         
@@ -103,7 +82,6 @@
             pipelineStateDescriptor.vertexFunction = [defaultLibrary newFunctionWithName:@"vertexShader"];
             pipelineStateDescriptor.fragmentFunction = [defaultLibrary newFunctionWithName:@"fragmentShader"];;
             pipelineStateDescriptor.colorAttachments[0].pixelFormat = _outputPixelFormat;
-            pipelineStateDescriptor.vertexDescriptor = _mtlVertexDescriptor;
         }
         
         NSError *error = nil;
@@ -127,19 +105,13 @@
 
 - (void)loadMesh
 {
-    vector_float4 positions[] = {
-        {-1,  -1, 0, 1},
-        { 1,  -1, 0, 1},
-        { 0,   1, 0, 1}
+    Vertex vertex[] = {
+        {{-1,  -1, 0, 1}, {0, 0}},
+        {{ 1,  -1, 0, 1}, {1, 0}},
+        {{ 0,   1, 0, 1}, {0, 1}},
     };
-    vector_float2 texCoords[] = {
-        {0, 0},
-        {1, 0},
-        {0, 1}
-    };
-    _positionsBuffer = [_device newBufferWithBytes:positions length:sizeof(positions) options:MTLResourceCPUCacheModeDefaultCache];
-    _texCoordsBuffer = [_device newBufferWithBytes:texCoords length:sizeof(texCoords) options:MTLResourceCPUCacheModeDefaultCache];
-    _vertexCount = sizeof(positions) / sizeof(vector_float4);
+    _vertexBuffer = [_device newBufferWithBytes:vertex length:sizeof(vertex) options:MTLResourceCPUCacheModeDefaultCache];
+    _vertexCount = sizeof(vertex) / sizeof(Vertex);
 }
 
 
@@ -186,8 +158,7 @@
     }
     [renderEncoder pushDebugGroup:@"DrawBox"];
     [renderEncoder setRenderPipelineState:_pipelineState];
-    [renderEncoder setVertexBuffer:_positionsBuffer offset:0 atIndex:BufferIndexMeshPositions];
-    [renderEncoder setVertexBuffer:_texCoordsBuffer offset:0 atIndex:BufferIndexMeshTexCoords];
+    [renderEncoder setVertexBuffer:_vertexBuffer offset:0 atIndex:BufferIndexMesh];
     [renderEncoder setVertexBuffer:_uniformBuffer offset:0 atIndex:BufferIndexUniforms];
     [renderEncoder setFragmentBuffer:_uniformBuffer offset:0 atIndex:BufferIndexUniforms];
     [renderEncoder setFragmentTexture:_colorMap atIndex:TextureIndexColor];
