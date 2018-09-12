@@ -1,0 +1,4 @@
+OfflineMetalExample
+===================
+
+MTKViewを使わないMetalサンプル.
