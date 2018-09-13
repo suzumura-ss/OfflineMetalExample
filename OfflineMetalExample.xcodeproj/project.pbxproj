@@ -84,6 +84,7 @@
 				222419BC2148C1C100A53924 /* Sources */,
 				222419BD2148C1C100A53924 /* Frameworks */,
 				222419BE2148C1C100A53924 /* CopyFiles */,
+				229CEB96214A033F00997ED0 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -124,6 +125,25 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		229CEB96214A033F00997ED0 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${METAL_LIBRARY_OUTPUT_DIR}/default.metallib",
+			);
+			outputPaths = (
+				"${SRCROOT}/${PROJECT}/${CONFIGURATION}",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cp ${METAL_LIBRARY_OUTPUT_DIR}/default.metallib ${SRCROOT}/${PROJECT}/${CONFIGURATION}";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		222419BC2148C1C100A53924 /* Sources */ = {
