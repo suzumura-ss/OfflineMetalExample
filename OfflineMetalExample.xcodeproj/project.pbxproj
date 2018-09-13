@@ -10,17 +10,19 @@
 		222419C42148C1C100A53924 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 222419C32148C1C100A53924 /* main.m */; };
 		222419CE2148C1E900A53924 /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 222419CB2148C1E900A53924 /* Shaders.metal */; };
 		222419CF2148C1E900A53924 /* Renderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 222419CD2148C1E900A53924 /* Renderer.m */; };
+		22B38F372149FF5F00FD6E84 /* OfflineMetalExample in CopyFiles */ = {isa = PBXBuildFile; fileRef = 222419C02148C1C100A53924 /* OfflineMetalExample */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		222419BE2148C1C100A53924 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = /usr/share/man/man1/;
+			buildActionMask = 12;
+			dstPath = "$(SRCROOT)/$(PROJECT)/$(CONFIGURATION)";
 			dstSubfolderSpec = 0;
 			files = (
+				22B38F372149FF5F00FD6E84 /* OfflineMetalExample in CopyFiles */,
 			);
-			runOnlyForDeploymentPostprocessing = 1;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
