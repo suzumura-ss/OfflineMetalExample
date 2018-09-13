@@ -37,6 +37,7 @@
 - (instancetype)initWithSize:(CGSize)size
 {
     id <MTLDevice> device = MTLCreateSystemDefaultDevice();
+    if (!device) return nil;
     return [self initWithDevice:device size:size];
 }
 
@@ -105,7 +106,7 @@
             pipelineStateDescriptor.vertexDescriptor = _mtlVertexDescriptor;
         }
         
-        NSError *error = NULL;
+        NSError *error = nil;
         _pipelineState = [_device newRenderPipelineStateWithDescriptor:pipelineStateDescriptor error:&error];
         if (!_pipelineState || error)
         {

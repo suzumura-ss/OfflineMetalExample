@@ -15,6 +15,11 @@
 void Exec()
 {
     Renderer* renderer = [[Renderer alloc] initWithSize:CGSizeMake(8, 8)];
+    if (!renderer)
+    {
+        NSLog(@"Failed to created renderer.");
+        return;
+    }
     renderer.uniforms->flipVertical = true;
     renderer.uniforms->color = (vector_uint4){10, 11, 12, 13};
     [renderer draw];
